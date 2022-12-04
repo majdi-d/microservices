@@ -1,0 +1,48 @@
+version: '3.4'
+networks:
+  backend:
+services:
+  microservices.customersvc:
+    image: ${DOCKER_REGISTRY-}microservicescustomersvc
+    build:
+      context: .
+      dockerfile: microservices.customersvc/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8002:80
+      - 8003:443
+    environment:
+      - DB_HOST=customer-db-sqlserv
+      - DB_NAME=db_customer
+      - DB_PASSWORD=Pass@word324#z
+    depends_on:
+      - customerdb
+  customerdb:
+    container_name: customer-db-sqlserv
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pass@word324#z
+    networks:
+      - backend
+    ports:
+      - 8001:1433
+    volumes:
+      - D:/Sources/Data:/var/opt/mssql/data
+  microservices.productsvc:
+    image: ${DOCKER_REGISTRY-}microservicesproductsvc
+    build:
+      context: .
+      dockerfile: microservices.productsvc/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8004:80
+      - 8005:443
+    environment:
+      - DB_HOST=customer-db-sqlserv
+      - DB_NAME=db_customer
+      - DB_PASSWORD=Pass@word324#z
+    depends_on:
+      - customerdb
