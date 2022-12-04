@@ -10,11 +10,11 @@ namespace microservices.productsvc.Models
         [Column("product_id")]
         public int Id { get; set; }
         [Column("product_name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Column("product_description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Column("product_sku")]
-        public string Sku { get; set; }
+        public string? Sku { get; set; }
 
     }
 }

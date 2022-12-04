@@ -10,10 +10,10 @@ namespace microservices.customersvc.Models
         [Column("customer_id")]
         public int Id { get; set; }
         [Column("customer_name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Column("customer_mobileNumber")]
-        public string MobileNumber { get; set; }
+        public string? MobileNumber { get; set; }
         [Column("customer_address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
     }
 }

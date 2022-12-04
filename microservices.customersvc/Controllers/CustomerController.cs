@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using microservices.customersvc;
 using microservices.customersvc.Models;
+using Prometheus;
 
 namespace microservices.customersvc.Controllers
 {
@@ -15,6 +16,10 @@ namespace microservices.customersvc.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly CustomerDbContext _context;
+        private static readonly Counter ProcessedGetJobCount = Metrics.CreateCounter("customer_get_jobs_processed_total", "Number of processed GET customer jobs");
+        private static readonly Counter ProcessedPostJobCount = Metrics.CreateCounter("customer_post_jobs_processed_total", "Number of processed GET customer jobs");
+        private static readonly Counter ProcessedPutJobCount = Metrics.CreateCounter("customer_put_jobs_processed_total", "Number of processed GET customer jobs");
+        private static readonly Counter ProcessedDeleteJobCount = Metrics.CreateCounter("customer_delete_jobs_processed_total", "Number of processed GET customer jobs");
 
         public CustomerController(CustomerDbContext context)
         {
@@ -25,6 +30,7 @@ namespace microservices.customersvc.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
+            ProcessedGetJobCount.Inc();
             return await _context.Customers.ToListAsync();
         }
 
@@ -32,13 +38,14 @@ namespace microservices.customersvc.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
+            ProcessedGetJobCount.Inc();
             var customer = await _context.Customers.FindAsync(id);
 
             if (customer == null)
             {
                 return NotFound();
             }
-
+            
             return customer;
         }
 
@@ -47,6 +54,7 @@ namespace microservices.customersvc.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
+            ProcessedPutJobCount.Inc();
             if (id != customer.Id)
             {
                 return BadRequest();
@@ -78,6 +86,7 @@ namespace microservices.customersvc.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+            ProcessedPostJobCount.Inc();
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
@@ -88,6 +97,7 @@ namespace microservices.customersvc.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
+            ProcessedDeleteJobCount.Inc();
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {

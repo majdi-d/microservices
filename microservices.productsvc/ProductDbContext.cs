@@ -14,10 +14,20 @@ namespace microservices.productsvc
                 var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
                 if (databaseCreator != null)
                 {
+                    
                     if (!databaseCreator.CanConnect()) databaseCreator.Create();
+                    databaseCreator.CreateTables();
+                    //var db = Database.Open("MyDatabase");
+                    //string sql = $"SELECT Count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'MyTable'";
+                    //int count = Database.SqlQuery<int>($"SELECT Count(*) AS C FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Products'").Single();
+                    //if (count == 0)
+                    //{
+
+                    //table exists
+                    //}
                     //if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
-                  
-                        //databaseCreator.CreateTables();
+
+                    //databaseCreator.CreateTables();
 
                 }
 
