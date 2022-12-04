@@ -17,7 +17,7 @@ namespace microservices.productsvc
                     if (!databaseCreator.CanConnect()) databaseCreator.Create();
                     //if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
                   
-                        databaseCreator.CreateTables();
+                        //databaseCreator.CreateTables();
 
                 }
 
